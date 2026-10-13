@@ -1,14 +1,20 @@
 """Inbound event persistence model."""
 
+from __future__ import annotations
+
 import uuid
 from datetime import datetime
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from sqlalchemy import DateTime, Index, Text, Uuid, func
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
+
+if TYPE_CHECKING:
+    from app.models.delivery_attempt import DeliveryAttempt
+    from app.models.outbox import OutboxRecord
 
 
 class Event(Base):
@@ -23,5 +29,5 @@ class Event(Base):
         DateTime(timezone=True), nullable=False, server_default=func.now()
     )
 
-    delivery_attempts: Mapped[list["DeliveryAttempt"]] = relationship(back_populates="event")
-    outbox_records: Mapped[list["OutboxRecord"]] = relationship(back_populates="event")
+    delivery_attempts: Mapped[list[DeliveryAttempt]] = relationship(back_populates="event")
+    outbox_records: Mapped[list[OutboxRecord]] = relationship(back_populates="event")
