@@ -1,20 +1,30 @@
 """Webhook subscription persistence model."""
 
+from __future__ import annotations
+
 import uuid
 from datetime import datetime
+from typing import TYPE_CHECKING
 
-from sqlalchemy import ARRAY, Boolean, DateTime, Text, Uuid, func
+from sqlalchemy import Boolean, DateTime, Index, String, Text, Uuid, func
+from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
 
+if TYPE_CHECKING:
+    from app.models.delivery_attempt import DeliveryAttempt
+
 
 class Subscription(Base):
     __tablename__ = "subscriptions"
+    __table_args__ = (
+        Index("idx_subscriptions_event_types", "event_types", postgresql_using="gin"),
+    )
 
     id: Mapped[uuid.UUID] = mapped_column(Uuid, primary_key=True, server_default=func.gen_random_uuid())
     endpoint_url: Mapped[str] = mapped_column(Text, nullable=False)
-    event_types: Mapped[list[str]] = mapped_column(ARRAY(Text), nullable=False)
+    event_types: Mapped[list[str]] = mapped_column(ARRAY(String), nullable=False)
     secret: Mapped[str] = mapped_column(Text, nullable=False)
     active: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default="true")
     created_at: Mapped[datetime] = mapped_column(
@@ -24,4 +34,4 @@ class Subscription(Base):
         DateTime(timezone=True), nullable=False, server_default=func.now(), onupdate=func.now()
     )
 
-    delivery_attempts: Mapped[list["DeliveryAttempt"]] = relationship(back_populates="subscription")
+    delivery_attempts: Mapped[list[DeliveryAttempt]] = relationship(back_populates="subscription")

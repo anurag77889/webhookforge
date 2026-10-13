@@ -1,14 +1,19 @@
 """Transactional outbox records used to recover event dispatch."""
 
+from __future__ import annotations
+
 import uuid
 from datetime import datetime
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from sqlalchemy import DateTime, ForeignKey, Index, Integer, Text, UniqueConstraint, Uuid, func
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
+
+if TYPE_CHECKING:
+    from app.models.event import Event
 
 
 class OutboxRecord(Base):
@@ -31,4 +36,4 @@ class OutboxRecord(Base):
     )
     dispatched_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
-    event: Mapped["Event"] = relationship(back_populates="outbox_records")
+    event: Mapped[Event] = relationship(back_populates="outbox_records")

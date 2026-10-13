@@ -1,12 +1,18 @@
 """Dead-letter queue persistence model."""
 
+from __future__ import annotations
+
 import uuid
 from datetime import datetime
+from typing import TYPE_CHECKING
 
 from sqlalchemy import DateTime, ForeignKey, Text, UniqueConstraint, Uuid, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
+
+if TYPE_CHECKING:
+    from app.models.delivery_attempt import DeliveryAttempt
 
 
 class DLQRecord(Base):
@@ -25,4 +31,4 @@ class DLQRecord(Base):
     )
     replayed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
-    final_attempt: Mapped["DeliveryAttempt | None"] = relationship(back_populates="dlq_record")
+    final_attempt: Mapped[DeliveryAttempt | None] = relationship(back_populates="dlq_record")

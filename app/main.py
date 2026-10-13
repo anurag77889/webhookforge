@@ -4,7 +4,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
-from app.api import health
+from app.api import health, subscriptions
 from app.database import engine
 from app.logging import configure_logging
 from app.redis_client import close_redis_client
@@ -26,6 +26,7 @@ def create_app() -> FastAPI:
         lifespan=lifespan,
     )
     application.include_router(health.router)
+    application.include_router(subscriptions.router)
     return application
 
 

@@ -1,7 +1,10 @@
 """Webhook delivery attempt persistence model."""
 
+from __future__ import annotations
+
 import uuid
 from datetime import datetime
+from typing import TYPE_CHECKING
 
 from sqlalchemy import (
     CheckConstraint,
@@ -17,6 +20,11 @@ from sqlalchemy import (
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
+
+if TYPE_CHECKING:
+    from app.models.dlq_record import DLQRecord
+    from app.models.event import Event
+    from app.models.subscription import Subscription
 
 
 class DeliveryAttempt(Base):
@@ -53,6 +61,6 @@ class DeliveryAttempt(Base):
     )
     completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
-    event: Mapped["Event"] = relationship(back_populates="delivery_attempts")
-    subscription: Mapped["Subscription"] = relationship(back_populates="delivery_attempts")
-    dlq_record: Mapped["DLQRecord | None"] = relationship(back_populates="final_attempt")
+    event: Mapped[Event] = relationship(back_populates="delivery_attempts")
+    subscription: Mapped[Subscription] = relationship(back_populates="delivery_attempts")
+    dlq_record: Mapped[DLQRecord | None] = relationship(back_populates="final_attempt")
