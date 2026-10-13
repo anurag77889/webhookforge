@@ -10,7 +10,7 @@ services:
       - CELERY_BROKER_URL=redis://redis:6379/1
       - CELERY_RESULT_BACKEND=redis://redis:6379/2
       - API_KEY=${API_KEY:-dev-api-key}
-      - MAX_DELIVERY_RETRIES=5
+      - MAX_DELIVERY_RETRIES=4
       - DELIVERY_TIMEOUT_SECONDS=5
       - MAX_PAYLOAD_SIZE_BYTES=65536
       - RATE_LIMIT_EVENTS_PER_MINUTE=100
@@ -38,7 +38,7 @@ services:
       - REDIS_URL=redis://redis:6379/0
       - CELERY_BROKER_URL=redis://redis:6379/1
       - CELERY_RESULT_BACKEND=redis://redis:6379/2
-      - MAX_DELIVERY_RETRIES=5
+      - MAX_DELIVERY_RETRIES=4
       - DELIVERY_TIMEOUT_SECONDS=5
       - PROMETHEUS_MULTIPROC_DIR=/tmp/prometheus
     depends_on:
