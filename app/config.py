@@ -18,7 +18,8 @@ class Settings(BaseSettings):
     API_KEY: str = "dev-api-key"
 
     # Delivery settings
-    MAX_DELIVERY_RETRIES: int = 5
+    # Four retries plus the initial delivery gives the documented five total attempts.
+    MAX_DELIVERY_RETRIES: int = 4
     DELIVERY_TIMEOUT_SECONDS: float = 5.0
     MAX_PAYLOAD_SIZE_BYTES: int = 65536
 

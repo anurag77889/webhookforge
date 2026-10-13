@@ -20,7 +20,9 @@ safety controls.
 
 ## Status
 
-Build in progress — see the technical specification for scope and milestones.
+Phase 1 complete: Docker Compose infrastructure, SQLAlchemy models, Alembic's
+initial schema, structured logging, and active dependency health checks are in
+place. Event ingestion and webhook delivery are the next phases.
 
 ## Quickstart
 
