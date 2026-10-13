@@ -30,4 +30,6 @@ class Event(Base):
     )
 
     delivery_attempts: Mapped[list[DeliveryAttempt]] = relationship(back_populates="event")
-    outbox_records: Mapped[list[OutboxRecord]] = relationship(back_populates="event")
+    outbox_records: Mapped[list[OutboxRecord]] = relationship(
+        back_populates="event", passive_deletes=True
+    )

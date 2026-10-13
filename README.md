@@ -20,9 +20,11 @@ safety controls.
 
 ## Status
 
-Phase 1 complete: Docker Compose infrastructure, SQLAlchemy models, Alembic's
-initial schema, structured logging, and active dependency health checks are in
-place. Event ingestion and webhook delivery are the next phases.
+Phase 2 complete: Event ingestion endpoint (`POST /events`) with atomic
+idempotent creation via PostgreSQL `ON CONFLICT DO NOTHING`, transactional
+outbox record in the same commit, and a Celery dispatch task that marks
+records delivered. Phase 3 (per-subscriber HTTP delivery with exponential
+backoff retry and dead-letter queue) is next.
 
 ## Quickstart
 
@@ -49,8 +51,8 @@ Linux/macOS users: use the `Makefile` targets (`make dev`, `make migrate`,
 ## Services
 
 | Service | Port |
-|---|---|
-| API | http://localhost:8000 |
-| Prometheus | http://localhost:9090 |
+| --- | --- |
+| API | <http://localhost:8000> |
+| Prometheus | <http://localhost:9090> |
 | PostgreSQL | localhost:5432 |
 | Redis | localhost:6379 |
