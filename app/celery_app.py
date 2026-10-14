@@ -32,9 +32,9 @@ celery_app.conf.update(
     # Timezone
     timezone="UTC",
     enable_utc=True,
+    include=["app.tasks.deliver", "app.tasks.dispatch"],
 )
 
-# Discover task modules. Imported lazily so that importing app.celery_app
-# (e.g. from the API for health checks) does not pull in task dependencies
-# before they are registered by the worker.
+# Discover task modules.
 celery_app.autodiscover_tasks(["app"])
+
